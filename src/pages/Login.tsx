@@ -1,8 +1,16 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useTypedSelector } from 'core/hooks/useTypeSelector';
 import { useActions } from 'core/hooks/useActions';
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { getLoadingButtonUtilityClass } from '@mui/lab';
 
 interface IData {
 	login: string;
@@ -28,35 +36,56 @@ export default function Login() {
 		}));
 	};
 
-	const onClick = useCallback(() => {
+	const onClick = () => {
 		if (!loading) {
 			loginUser(login, password);
 		}
-	}, [loading, login, password]);
+	};
 
 	useEffect(() => {
-		if (user) {
-			history('/');
-		}
-	}, []);
-
-	useEffect(() => {
-		if (user) {
+		if (user && !loading) {
 			history('/');
 		}
 	}, [user]);
 
 	return (
-		<>
-			<input type='text' value={login} name='login' onChange={setInputData} />
-			<input
-				type='password'
-				value={password}
-				name='password'
-				onChange={setInputData}
-			/>
-			{error && <p>{error}</p>}
-			<button onClick={onClick}>{loading ? 'Loading...' : 'Login'}</button>
-		</>
+		<Card>
+			<CardContent>
+				<Stack spacing={2}>
+					<TextField
+						value={login}
+						name='login'
+						onChange={setInputData}
+						label='Login'
+						fullWidth
+						required
+					/>
+
+					<TextField
+						type='password'
+						value={password}
+						name='password'
+						onChange={setInputData}
+						label='Password'
+						fullWidth
+						required
+					/>
+
+					{error && (
+						<Typography variant='caption' align='center' color='red'>
+							{error}
+						</Typography>
+					)}
+
+					<LoadingButton
+						onClick={onClick}
+						loading={loading}
+						variant='contained'
+					>
+						Login
+					</LoadingButton>
+				</Stack>
+			</CardContent>
+		</Card>
 	);
 }

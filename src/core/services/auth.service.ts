@@ -10,7 +10,7 @@ export const login = (username: string, password: string) => {
 			? setTimeout(() => {
 					resolve(user);
 			  }, 1000)
-			: reject(new Error('Не удалось'));
+			: reject(new Error('Incorrect data'));
 	});
 };
 
